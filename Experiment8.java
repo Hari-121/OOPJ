@@ -94,9 +94,5 @@ public class Experiment8 {
         Spider s = new Spider();
         s.eat();
         s.walk();
-        // System.out.print("\nThis cat's name is "+c.getName());
-        // c.setName("Moose");
-        // System.out.print("\nThis cat's name is "+c.getName());
-        // c.play();
     }
 }
