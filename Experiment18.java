@@ -3,13 +3,13 @@ import java.util.Scanner;
 public class Experiment18 {
 
     // Function to return position of pivot element //
-    static int partition(int arr[], int low, int high)
+    static int partition(String arr[], int low, int high)
     {
-        int pivot = arr[high];
+        String pivot = arr[high];
         int i = low-1;
         for(int j=low; j<high; j++)
         {
-            if(arr[j]<pivot)
+            if(arr[j].compareTo(pivot) < 0)
             {
                 i++;
                 swap(arr,i,j);
@@ -20,15 +20,15 @@ public class Experiment18 {
     }
 
     // Function to swap elements at 2 positions of the array //
-    static void swap(int arr[], int i, int j)
+    static void swap(String arr[], int i, int j)
     {
-        int temp = arr[i];
+        String temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
     }
 
     // Function to print //
-    static void print(int arr[], int n)
+    static void print(String arr[], int n)
     {
         System.out.print("\nSorted Array: ");
         for(int i=0; i<n; i++)
@@ -38,7 +38,7 @@ public class Experiment18 {
     }
 
     // QuickSort Function //
-    static void quickSort(int arr[], int low, int high)
+    static void quickSort(String arr[], int low, int high)
     {
         if(low < high)
         {
@@ -52,11 +52,11 @@ public class Experiment18 {
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter the size of array: ");
         int n = sc.nextInt();
-        int arr[] = new int[n];
+        String arr[] = new String[n];
         System.out.print("Enter array elements: ");
         for(int i=0; i<n; i++)
         {
-            arr[i] = sc.nextInt();
+            arr[i] = sc.nextLine();
         }
         quickSort(arr,0,n-1);
         print(arr,n);
