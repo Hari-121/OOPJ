@@ -1,171 +1,142 @@
-package Java;
-
 import java.util.Scanner;
 
-class  InvalidAmountException extends Exception{
-    String message;
-    public  InvalidAmountException(String s) {
-        message = s;
-    }
-    public String getMessage() {
-        return message;
-    }
-}
-
-class Customer{
-    int accountNumber;
-    int bankBalance;
-    static int minimumBalance = 2000;
-    String name;
-    Customer(){
-        this.bankBalance = 2000;
-    }
-    void getDetails() {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Enter the Account Number: ");
-        this.accountNumber = sc.nextInt();
-        System.out.print("Enter the name: ");
-        sc.nextLine();
-        this.name = sc.nextLine();
-    }
-    void display() {
-        System.out.println("Account Number: "+this.accountNumber);
-        System.out.println("Name: "+this.name);
-        System.out.println("Bank Balance: "+this.bankBalance);
-    }
-    void deposit() {
-        System.out.print("Enter the amount to be deposited: ");
-        Scanner sc = new Scanner(System.in);
-        int change = sc.nextInt();
-        try {
-            if(change <= 0)
-                throw new  InvalidAmountException("\nAmount is less than or equal to zero");
-            else {
-                this.bankBalance += change;
-                System.out.println("The transaction has been finished successfully");
-            }
-        }
-        catch(InvalidAmountException e) {
-            System.out.println(e.getMessage());
-            System.out.println("Transaction Failed!!");
-
-        }
-    }
-    void withdraw() {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Enter the amount to be withdrawn: ");
-        int change = sc.nextInt();
-        try {
-            if(this.bankBalance - change < minimumBalance)
-                throw new InvalidAmountException("\nMinimum balance amount is exceeded");
-            else {
-                this.bankBalance -= change;
-                System.out.println("The transaction has been finished successfully");
-            }
-        }
-        catch(InvalidAmountException e) {
-            System.out.println(e.getMessage());
-            System.out.println("Transaction failed!!");
-        }
+class bank {
+    String acc_no, acc_type, name;
+    double bal;
+    bank(String acc_no, String acc_type, String name, double bal) {
+        this.acc_no = acc_no;
+        this.acc_type = acc_type;
+        this.name = name;
+        this.bal = bal;
     }
 }
+public class Experiment10 extends bank {
 
-public class Experiment10 {
+    Experiment10(String acc_no, String acc_type, String name, double bal) {
+        super(acc_no, acc_type, name, bal);
+    }
+    static Scanner sc = new Scanner(System.in);
+
+    private static char menu() {
+        char ch;
+        System.out.print("\nMain Main");
+        System.out.print("\n1. Display all account details");
+        System.out.print("\n2. Search by account number");
+        System.out.print("\n3. Deposit the amount");
+        System.out.print("\n4. Withdraw the amount");
+        System.out.print("\n5. Exit");
+        System.out.print("\nEnter your choice: ");
+        ch = sc.next().charAt(0);
+        return ch;
+    }
+
+    private static void display(bank b[], int n) {
+        for(int i=0; i<n; i++) {
+            System.out.println("\n\nDetails of "+(i+1)+"th customer");
+            System.out.println("Account No: "+b[i].acc_no);
+            System.out.println("Account Type: "+b[i].acc_type);
+            System.out.println("Account Name: "+b[i].name);
+            System.out.println("Balance: "+b[i].bal);
+        }
+    }
+
+    private static void displayone(bank b[], int i) {
+            System.out.println("\n\nDetails of "+(i+1)+"th customer");
+            System.out.println("Account No: "+b[i].acc_no);
+            System.out.println("Account Type: "+b[i].acc_type);
+            System.out.println("Account Name: "+b[i].name);
+            System.out.println("Balance: "+b[i].bal);
+    }
+
+    private static void search(String acc_no, int n, bank b[], char ch) {
+        int loc = -1;
+        for(int i=0; i<n; i++) {
+            if(b[i].acc_no.equals(acc_no)) {
+                loc = i;
+                break;
+            }
+        }
+        if(loc != -1) {
+            if(ch == '2') {
+                displayone(b, loc);
+            }
+            else if(ch == '3') {
+                System.out.println("Enter the amount to be deposited: ");
+                double amt = sc.nextDouble();
+                deposit(b, loc, amt);
+            }
+            else if(ch=='4') {
+                System.out.println("Enter the amount to be withdrawed: ");
+                double amt = sc.nextDouble();
+                withdraw(b, loc, amt);
+            }
+        }
+        else {
+            System.out.print("\n Customer not found!!\n");
+        }
+    }
+
+    private static void deposit(bank b[], int loc, double amt) {
+        b[loc].bal += amt;
+        System.out.println("Rs."+amt+" deposited...\nNew Balance: "+b[loc].bal);
+    }
+
+    private static void withdraw(bank b[], int loc, double amt) {
+        b[loc].bal -= amt;
+        System.out.println("Rs."+amt+" withdrawed...\nNew Balance: "+b[loc].bal);
+    }
+
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int size;
-        System.out.print("Enter the number of customers: ");
-        size = sc.nextInt();
-        Customer[] customers = new Customer[size];
-        for(int i=0; i<size; ++i) {
-            customers[i] = new Customer();
-            System.out.println("Enter the details of the "+(i+1)+"th customer:");
-            customers[i].getDetails();
-            System.out.println();
+        String acc_no, acc_type, name;
+        double bal;
+        int n;
+        char ch;
+        System.out.print("Enter the total no: of customers: ");
+        n = sc.nextInt();
+        bank b[] = new bank[n];
+        for(int i=0; i<n;i++) {
+            System.out.print("\nEnter the details of " + (i+1) + "th customer: \n\n");
+            String temp = sc.nextLine();
+            System.out.print("\nEnter Account Type: ");
+            acc_type = sc.nextLine();
+            System.out.print("\nEnter Account No: ");
+            acc_no = sc.nextLine();
+            System.out.print("\nEnter Name: ");
+            name = sc.nextLine();
+            System.out.print("\nEnter the balance: ");
+            bal = sc.nextDouble();
+            b[i] = new bank(acc_no, acc_type, name, bal);
         }
         do {
-            System.out.println("\n1.Display All Account Details");
-            System.out.println("2.Search By Account Number");
-            System.out.println("3.Deposit Amount");
-            System.out.println("4.Withdraw");
-            System.out.println("5.Exit");
-            System.out.print("Enter your choice: ");
-            int choice;
-            choice = sc.nextInt();
-            switch(choice) {
-                case 1:
-                    for(int i=0; i<size; ++i) {
-                        customers[i].display();
-                        System.out.println();
-                    }
+            ch = menu();
+            switch (ch) {
+                case '1':
+                    display(b, n);
                     break;
-                case 2:
-                    int acc,flag,count = 0;
-                    while(true){
-                        System.out.print("Enter the Account Number: ");
-                        acc = sc.nextInt();
-                        flag = 0;
-                        for (Customer x : customers) {
-                            if (x.accountNumber == acc) {
-                                flag++;
-                                x.display();
-                                break;
-                            }
-                        }
-                        if(flag == 0 && count<2) {
-                            System.out.println("The Account Number you entered is Invalid\n");
-                            count++;
-                        }
-                        else
-                            break;
-                    }
+                case '2':
+                    String temp = sc.nextLine();
+                    System.out.print("\nEnter the Customer ID: ");
+                    String accno = sc.nextLine();
+                    search(accno, n, b, ch);
                     break;
-                case 3:
-                    count = 0;
-                    while(true) {
-                        System.out.print("Enter the Account Number: ");
-                        acc = sc.nextInt();
-                        flag = 0;
-                        for(Customer x : customers) {
-                            if (x.accountNumber == acc) {
-                                flag++;
-                                x.deposit();
-                                break;
-                            }
-                        }
-                        if(flag == 0 && count<2) {
-                            System.out.println("The Account Number you entered is Invalid\n");
-                            count++;
-                        }
-                        else
-                            break;
-                    }
+                case '3':
+                    temp = sc.nextLine();
+                    System.out.print("\nEnter the Customer ID: ");
+                    accno = sc.nextLine();
+                    search(accno, n, b, ch);
                     break;
-                case 4:
-                    count = 0;
-                    while(true) {
-                        System.out.print("Enter the Account Number: ");
-                        acc = sc.nextInt();
-                        flag = 0;
-                        for(Customer x : customers) {
-                            if(x.accountNumber == acc) {
-                                flag++;
-                                x.withdraw();
-                                break;
-                            }
-                        }
-                        if(flag == 0 && count<2) {
-                            System.out.println("The Account Number you entered is Invalid\n");
-                            count++;
-                        }
-                        else
-                            break;
-                    }
+                case '4':
+                    temp = sc.nextLine();
+                    System.out.print("\nEnter the Customer ID: ");
+                    accno = sc.nextLine();
+                    search(accno, n, b, ch);
                     break;
-                case 5:
-                    sc.close();
-                    System.exit(0);
+                case '5':
+                    System.out.println("Exiting");
+                    break;
+                default:
+                    System.out.println("\nWRONG CHOICE!! TRY AGAIN\n");
             }
-        }while(true);
+        }while(ch != '5');
     }
 }
